@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { iClientResponse } from "../interfaces/user.interface";
+import { iClientResponse } from "../interfaces/user.interfaces";
 import {
     createClientService,
     destroyClientService,
@@ -19,12 +19,12 @@ export const createClientController = async (req: Request, res: Response) => {
 };
 
 export const retrieveClientController = async (req: Request, res: Response) => {
-    const client: iClientResponse = await retrieveClientService(req.client);
+    const client: iClientResponse = await retrieveClientService(req.paramClient);
     return res.json(client);
 };
 
 export const updateClientController = async (req: Request, res: Response) => {
-    const client: iClientResponse = await updateClientService(req.client, req.body);
+    const client: iClientResponse = await updateClientService(req.paramClient, req.body);
     return res.json(client);
 };
 

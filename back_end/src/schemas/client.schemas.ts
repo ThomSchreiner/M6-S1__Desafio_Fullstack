@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { Schema } from "yup";
-import { iClientRequest, iClientResponse } from "../interfaces/user.interface";
+import { iClientRequest, iClientResponse } from "../interfaces/user.interfaces";
 
 export const clientRequestSchema: Schema<iClientRequest> = yup.object().shape({
     first_name: yup.string().max(50).required(),

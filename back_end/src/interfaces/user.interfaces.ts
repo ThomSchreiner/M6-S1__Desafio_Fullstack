@@ -16,3 +16,8 @@ export interface iClientResponse {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface iLogin {
+    email: string;
+    password: string;
+}

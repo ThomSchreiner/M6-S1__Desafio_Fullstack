@@ -10,6 +10,6 @@ export const ensureClientExistsMiddleware = async (req: Request, res: Response, 
             throw new AppError("User not found!", 404);
         });
 
-    req.client = client;
+    req.paramClient = client;
     return next();
 };

@@ -1,7 +1,7 @@
 import { AppDataSource } from "../data-source";
 import { Client } from "../entities/client.entity";
 import { AppError } from "../errors";
-import { iClientRequest, iClientResponse } from "../interfaces/user.interface";
+import { iClientRequest, iClientResponse } from "../interfaces/user.interfaces";
 import { clientResponseSchema, listOfClientsResponseSchema } from "../schemas/client.schemas";
 
 export const listClientsService = async (): Promise<iClientResponse[]> => {

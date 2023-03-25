@@ -1,8 +1,8 @@
 import * as yup from "yup";
-import { Schema } from "yup";
-import { iClientRequest, iClientResponse } from "../interfaces/user.interfaces";
+import { ObjectSchema } from "yup";
+import { iClientRequest, iClientResponse, iLogin } from "../interfaces/user.interfaces";
 
-export const clientRequestSchema: Schema<iClientRequest> = yup.object().shape({
+export const clientRequestSchema: ObjectSchema<iClientRequest> = yup.object().shape({
     first_name: yup.string().max(50).required(),
     last_name: yup.string().max(50).required(),
     email: yup.string().email().max(127).required(),
@@ -10,7 +10,9 @@ export const clientRequestSchema: Schema<iClientRequest> = yup.object().shape({
     phone_number: yup.string().min(10).max(11).required(),
 });
 
-export const clientResponseSchema: Schema<iClientResponse> = yup.object().shape({
+export const clientUpdateSchema = clientRequestSchema.partial();
+
+export const clientResponseSchema: ObjectSchema<iClientResponse> = yup.object().shape({
     updatedAt: yup.date().required(),
     createdAt: yup.date().required(),
     phone_number: yup.string().min(10).max(11).required(),
@@ -21,3 +23,8 @@ export const clientResponseSchema: Schema<iClientResponse> = yup.object().shape(
 });
 
 export const listOfClientsResponseSchema = yup.array().of(clientResponseSchema).required();
+
+export const loginSchema: ObjectSchema<iLogin> = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup.string().required(),
+});

@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { ValidationError } from "yup";
 
 export class AppError extends Error {
     message: string;
@@ -14,6 +15,10 @@ export class AppError extends Error {
 export const handdleError = (err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof AppError) {
         return res.status(err.statusCode).json({ message: err.message });
+    }
+
+    if (err instanceof ValidationError) {
+        return res.status(400).json({ message: err.errors });
     }
 
     console.log(err);

@@ -7,7 +7,7 @@ export const ensureClientExistsMiddleware = async (req: Request, res: Response, 
     const client = await AppDataSource.getRepository(Client)
         .findOneByOrFail({ id: req.params.id })
         .catch(() => {
-            throw new AppError("User not found!", 404);
+            throw new AppError("Client not found!", 404);
         });
 
     req.paramClient = client;

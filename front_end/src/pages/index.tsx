@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { StyledBgImage } from "@/components/BgImage";
 import {
     Center,
@@ -10,27 +9,30 @@ import {
     Box,
     Text,
     Button,
+    Flex,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { iClientRegister } from "@/interfaces/user.interfaces";
-import { clientRegisterSchema } from "@/schemas/client.schemas";
-import { useClientContext } from "@/contexts/clientContext";
-import { StyledInput } from "@/components/Input";
+import { loginSchema } from "@/schemas/login.schemas";
+import { iLogin } from "@/interfaces/user.interfaces";
+import { useAuthContext } from "@/contexts/authContext";
+import Head from "next/head";
+import Link from "next/link";
+import { StyledLink } from "@/components/Link";
 
-export default function Register() {
+export default function Login() {
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<iClientRegister>({ resolver: yupResolver(clientRegisterSchema) });
+    } = useForm<iLogin>({ resolver: yupResolver(loginSchema) });
 
-    const { clientRegister } = useClientContext();
+    const { login } = useAuthContext();
 
     return (
         <>
             <Head>
-                <title>Register</title>
+                <title>Login</title>
             </Head>
             <StyledBgImage />
             <main>
@@ -45,54 +47,46 @@ export default function Register() {
                         py={"24px"}
                         display={"flex"}
                         flexDirection={"column"}
-                        gap={"16px"}
-                        onSubmit={handleSubmit(clientRegister)}
+                        gap={"24px"}
+                        onSubmit={handleSubmit(login)}
                     >
-                        <Text>Register</Text>
-                        <StyledInput
-                            label={"Nome:"}
-                            inputType={"text"}
-                            placeholder={"Digite seu nome"}
-                            register={register("first_name")}
-                            errors={errors.first_name}
-                        />
-                        <StyledInput
-                            label={"Sobrenome:"}
-                            inputType={"text"}
-                            placeholder={"Digite seu sobrenome"}
-                            register={register("last_name")}
-                            errors={errors.last_name}
-                        />
-                        <StyledInput
-                            label={"Email:"}
-                            inputType={"email"}
-                            placeholder={"Digite seu email"}
-                            register={register("email")}
-                            errors={errors.email}
-                        />
-                        <StyledInput
-                            label={"Senha:"}
-                            inputType={"password"}
-                            placeholder={"Digite sua senha"}
-                            register={register("password")}
-                            errors={errors.password}
-                        />
-                        <StyledInput
-                            label={"Celular:"}
-                            inputType={"text"}
-                            placeholder={"Digite seu número de celular"}
-                            register={register("phone_number")}
-                            errors={errors.phone_number}
-                        />
-
+                        <Flex justifyContent={"space-between"}>
+                            <Text>Login</Text>
+                            <StyledLink href="/register" text="Cadastrar" />
+                        </Flex>
+                        <FormControl isRequired isInvalid={!!errors.email}>
+                            <FormLabel>Email:</FormLabel>
+                            <Input
+                                type={"email"}
+                                placeholder={"Digite seu email"}
+                                bgColor={"blackAlpha.200"}
+                                color={"gray.800"}
+                                focusBorderColor={errors.email ? "red.500" : "pink.400"}
+                                {...register("email")}
+                            />
+                            {errors.email && <FormErrorMessage>{errors.email?.message}</FormErrorMessage>}
+                        </FormControl>
+                        <FormControl isRequired isInvalid={!!errors.password}>
+                            <FormLabel>Senha:</FormLabel>
+                            <Input
+                                type={"password"}
+                                placeholder={"Digite sua senha"}
+                                bgColor={"blackAlpha.200"}
+                                color={"gray.800"}
+                                focusBorderColor={errors.password ? "red.500" : "pink.400"}
+                                {...register("password")}
+                            />
+                            {errors.password && (
+                                <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+                            )}
+                        </FormControl>
                         <Button
                             type={"submit"}
-                            mt={"16px"}
                             bgColor={"pink.400"}
                             _hover={{ bgColor: "pink.300" }}
                             color={"gray.50"}
                         >
-                            Confirmar
+                            Entrar
                         </Button>
                     </Box>
                 </Center>

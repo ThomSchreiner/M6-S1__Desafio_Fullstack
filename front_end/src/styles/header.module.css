@@ -1,0 +1,6 @@
+.menuHover svg {
+    transition: 0.2s ease-in-out;
+}
+.menuHover:hover svg {
+    transform: translateX(4px);
+}

@@ -14,7 +14,10 @@ export const AuthProvider = ({ children }: iContextProps) => {
     const login = async (body: iLogin) => {
         try {
             const { data } = await api.post<iLoginResponse>("/login", body);
-            setCookie(null, "M6_S1_Token", data.token);
+            setCookie(null, "M6_S1_Token", data.token, {
+                maxAge: 60 * 60 * 7,
+                path: "/",
+            });
             router.push("/dashboard");
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -28,7 +31,7 @@ export const AuthProvider = ({ children }: iContextProps) => {
 
     const logout = () => {
         destroyCookie(null, "M6_S1_Token");
-        router.push("/login");
+        router.push("/");
     };
 
     return <AuthContext.Provider value={{ login, logout }}>{children}</AuthContext.Provider>;

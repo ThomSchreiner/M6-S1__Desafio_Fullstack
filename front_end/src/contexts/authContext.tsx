@@ -1,19 +1,11 @@
 import { iLogin, iLoginResponse } from "@/interfaces/user.interfaces";
 import { api } from "@/services/api";
 import { setCookie, destroyCookie } from "nookies";
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, useContext } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useRouter } from "next/router";
-
-interface iContextProps {
-    children: ReactNode;
-}
-
-interface iAuthContext {
-    login: (body: iLogin) => Promise<void>;
-    logout: () => void;
-}
+import { iAuthContext, iContextProps } from "@/interfaces/contexts.interfaces";
 
 const AuthContext = createContext<iAuthContext>({} as iAuthContext);
 
@@ -23,7 +15,6 @@ export const AuthProvider = ({ children }: iContextProps) => {
         try {
             const { data } = await api.post<iLoginResponse>("/login", body);
             setCookie(null, "M6_S1_Token", data.token);
-            toast.success("Login realizado com sucesso!");
             router.push("/dashboard");
         } catch (error) {
             if (axios.isAxiosError(error)) {

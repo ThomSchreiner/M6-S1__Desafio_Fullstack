@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loginSchema } from "@/schemas/login";
+import { loginSchema } from "@/schemas/login.schemas";
 import { iLogin } from "@/interfaces/user.interfaces";
 import { useAuthContext } from "@/contexts/authContext";
 import Head from "next/head";

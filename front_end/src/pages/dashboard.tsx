@@ -1,24 +1,56 @@
-import { PhoneIcon, StarIcon, TimeIcon, EmailIcon } from "@chakra-ui/icons";
-import { Center, Text, List, ListItem, Flex } from "@chakra-ui/react";
+import { PhoneIcon, StarIcon, TimeIcon, EmailIcon, AddIcon } from "@chakra-ui/icons";
+import { Center, Text, List, ListItem, Flex, Input, Button, useDisclosure, Box } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
 import { iDashboardProps } from "@/interfaces/pages.interfaces";
-import { iContact } from "@/interfaces/user.interfaces";
+import { iClient, iContact } from "@/interfaces/user.interfaces";
 import { StyledHeader } from "@/components/Header";
 import { api } from "@/services/api";
 import { StyledBgImage } from "@/components/BgImage";
 import nookies from "nookies";
 import Head from "next/head";
+import { ModalCreateContact } from "@/components/modalCreateContact";
+import { FormEvent } from "react";
+import { toast } from "react-toastify";
 
-export default function Dashboard({ contacts }: iDashboardProps) {
+export default function Dashboard({ contacts, client }: iDashboardProps) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const onSearch = (e: FormEvent) => {
+        e.preventDefault();
+        toast.error("Não implementado!");
+    };
+
     return (
         <>
             <Head>
                 <title>Dashboard</title>
             </Head>
             <StyledBgImage />
-            <StyledHeader userName="Thomas" />
+            <StyledHeader userName={client.first_name} />
             <main>
-                <Center mt={"40px"}>
+                <ModalCreateContact isOpen={isOpen} onClose={onClose} />
+                <Center mt={"40px"} flexDirection={"column"} gap={"24px"}>
+                    <Flex
+                        bg={"whiteAlpha.900"}
+                        borderRadius="xl"
+                        px={"32px"}
+                        py={"14px"}
+                        w={"100%"}
+                        maxW={"450px"}
+                        gap={"12px"}
+                    >
+                        <Box as={"form"} onSubmit={onSearch} display={"contents"}>
+                            <Input placeholder="Pesquise um contato" focusBorderColor={"pink.400"} />
+                        </Box>
+                        <Button
+                            color={"gray.50"}
+                            bgColor={"blackAlpha.500"}
+                            _hover={{ bgColor: "pink.300" }}
+                            onClick={onOpen}
+                        >
+                            <AddIcon />
+                        </Button>
+                    </Flex>
                     <List
                         bg={"whiteAlpha.900"}
                         borderRadius="xl"
@@ -77,9 +109,9 @@ export const getServerSideProps: GetServerSideProps<iDashboardProps> = async (ct
     }
 
     api.defaults.headers.authorization = `Bearer ${cookies["M6_S1_Token"]}`;
-    const { data } = await api.get<iContact[]>("/contacts");
-
-    return { props: { contacts: data } };
+    const { data: contacts } = await api.get<iContact[]>("/contacts");
+    const { data: client } = await api.get<iClient>("/clients/profile");
+    return { props: { contacts, client } };
 };
 
 const formatPhoneNumber = (phone_number: string) => {

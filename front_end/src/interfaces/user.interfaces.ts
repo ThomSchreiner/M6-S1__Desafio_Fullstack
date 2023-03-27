@@ -6,6 +6,8 @@ export interface iClientRegister {
     phone_number: string;
 }
 
+export type iContactRegister = Omit<iClientRegister, "password">;
+
 export interface iClient {
     id: string;
     first_name: string;

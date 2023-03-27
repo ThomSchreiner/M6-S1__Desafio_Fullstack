@@ -23,6 +23,11 @@ export const retrieveClientController = async (req: Request, res: Response) => {
     return res.json(client);
 };
 
+export const retrieveClientByTokenController = async (req: Request, res: Response) => {
+    const client: iClientResponse = await retrieveClientService(req.authClient);
+    return res.json(client);
+};
+
 export const updateClientController = async (req: Request, res: Response) => {
     const client: iClientResponse = await updateClientService(req.paramClient, req.body);
     return res.json(client);

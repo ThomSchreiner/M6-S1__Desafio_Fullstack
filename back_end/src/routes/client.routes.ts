@@ -3,6 +3,7 @@ import {
     createClientController,
     destroyClientController,
     listClientsController,
+    retrieveClientByTokenController,
     retrieveClientController,
     updateClientController,
 } from "../controllers/client.controllers";
@@ -15,6 +16,7 @@ export const clientRoutes = Router();
 
 clientRoutes.get("", listClientsController);
 clientRoutes.post("", bodyValidateMiddleware(clientRequestSchema), createClientController);
+clientRoutes.get("/profile", verifyTokenMiddleware, retrieveClientByTokenController);
 clientRoutes.get("/:id", verifyTokenMiddleware, ensureClientExistsMiddleware, retrieveClientController);
 clientRoutes.patch(
     "/:id",

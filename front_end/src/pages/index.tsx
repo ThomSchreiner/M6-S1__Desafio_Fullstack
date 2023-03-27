@@ -4,7 +4,6 @@ import {
     FormControl,
     FormLabel,
     FormErrorMessage,
-    FormHelperText,
     Input,
     Box,
     Text,
@@ -17,7 +16,6 @@ import { loginSchema } from "@/schemas/login.schemas";
 import { iLogin } from "@/interfaces/user.interfaces";
 import { useAuthContext } from "@/contexts/authContext";
 import Head from "next/head";
-import Link from "next/link";
 import { StyledLink } from "@/components/Link";
 
 export default function Login() {

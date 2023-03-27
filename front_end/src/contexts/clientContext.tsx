@@ -14,12 +14,11 @@ export const ClientProvider = ({ children }: iContextProps) => {
 
     const clientRegister = async (body: iClientRegister) => {
         try {
-            const { data } = await api.post<iClient>("/clients", body);
-            console.log(data);
+            await api.post<iClient>("/clients", body);
+
             toast.success("Conta criada com sucesso!");
             await login({ email: body.email, password: body.password });
         } catch (error) {
-            console.log(error);
             if (axios.isAxiosError(error)) {
                 toast.error(error.response?.data.message);
             }

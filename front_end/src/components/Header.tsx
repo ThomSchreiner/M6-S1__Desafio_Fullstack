@@ -1,7 +1,7 @@
 import { Flex, Menu, MenuButton, MenuList, MenuItem, Heading, Text, Button } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { iStyledHeader } from "@/interfaces/pages.interfaces";
-import style from "@/styles/header.module.css";
+import style from "@/styles/styles.module.css";
 import { useAuthContext } from "@/contexts/authContext";
 
 export const StyledHeader = ({ userName }: iStyledHeader) => {

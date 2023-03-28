@@ -1,23 +1,66 @@
-import { PhoneIcon, StarIcon, TimeIcon, EmailIcon, AddIcon } from "@chakra-ui/icons";
-import { Center, Text, List, ListItem, Flex, Input, Button, useDisclosure, Box } from "@chakra-ui/react";
+import {
+    PhoneIcon,
+    StarIcon,
+    TimeIcon,
+    EmailIcon,
+    AddIcon,
+    EditIcon,
+    DeleteIcon,
+    InfoIcon,
+} from "@chakra-ui/icons";
+import {
+    Center,
+    Text,
+    List,
+    ListItem,
+    Flex,
+    Input,
+    Button,
+    useDisclosure,
+    Box,
+    Spacer,
+} from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
-import { iDashboardProps } from "@/interfaces/pages.interfaces";
-import { iClient, iContact } from "@/interfaces/user.interfaces";
+import { iDashboardProps, iModalFormat } from "@/interfaces/pages.interfaces";
+import { iClient } from "@/interfaces/user.interfaces";
 import { StyledHeader } from "@/components/Header";
 import { api } from "@/services/api";
 import { StyledBgImage } from "@/components/BgImage";
 import nookies from "nookies";
 import Head from "next/head";
-import { ModalCreateContact } from "@/components/modalCreateContact";
-import { FormEvent } from "react";
+import { ModalContainer } from "@/components/Modal/modalContainer";
+import { FormEvent, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useContactContext } from "@/contexts/contactContext";
 
-export default function Dashboard({ contacts, client }: iDashboardProps) {
+export default function Dashboard({ client }: iDashboardProps) {
+    const [modalFormat, setModalFormat] = useState<iModalFormat>("createContact");
+    const [idDeleteContact, setIdDeleteContact] = useState("");
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { contacts, getContacts, setModalContact, deleteContact } = useContactContext();
+
+    useEffect(() => {
+        const getAllContacts = async () => {
+            await getContacts();
+        };
+        getAllContacts();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onSearch = (e: FormEvent) => {
         e.preventDefault();
         toast.error("Não implementado!");
+    };
+
+    const handdledeleteContact = async (id: string) => {
+        if (idDeleteContact == id) {
+            await deleteContact(idDeleteContact);
+        } else {
+            setIdDeleteContact(id);
+            setTimeout(() => {
+                setIdDeleteContact("");
+            }, 1500);
+        }
     };
 
     return (
@@ -25,10 +68,11 @@ export default function Dashboard({ contacts, client }: iDashboardProps) {
             <Head>
                 <title>Dashboard</title>
             </Head>
+            <ModalContainer isOpen={isOpen} onClose={onClose} modalFormat={modalFormat} />
             <StyledBgImage />
             <StyledHeader userName={client.first_name} />
+
             <main>
-                <ModalCreateContact isOpen={isOpen} onClose={onClose} />
                 <Center mt={"40px"} flexDirection={"column"} gap={"24px"}>
                     <Flex
                         bg={"whiteAlpha.900"}
@@ -46,7 +90,10 @@ export default function Dashboard({ contacts, client }: iDashboardProps) {
                             color={"gray.50"}
                             bgColor={"blackAlpha.500"}
                             _hover={{ bgColor: "pink.300" }}
-                            onClick={onOpen}
+                            onClick={() => {
+                                setModalFormat("createContact");
+                                onOpen();
+                            }}
                         >
                             <AddIcon />
                         </Button>
@@ -62,38 +109,75 @@ export default function Dashboard({ contacts, client }: iDashboardProps) {
                         flexDirection={"column"}
                         gap={"24px"}
                     >
-                        {contacts.map((contact) => (
-                            <ListItem key={contact.id}>
-                                <Flex
-                                    bgGradient={"linear(to-r, blue.200, pink.200, pink.400)"}
-                                    bgSize={"130%"}
-                                    bgPos={"center"}
-                                    borderRadius={"md"}
-                                    align={"center"}
-                                    pl={"10px"}
-                                    py={"2px"}
-                                    gap={"15px"}
-                                >
-                                    <StarIcon boxSize={3} />
-                                    <Text>Nome: {`${contact.first_name} ${contact.last_name}`}</Text>
-                                </Flex>
-                                <Flex align={"center"} pl={"10px"} py={"2px"} gap={"15px"}>
-                                    <EmailIcon boxSize={3} />
-                                    <Text>Email: {contact.email}</Text>
-                                </Flex>
-                                <Flex align={"center"} pl={"10px"} py={"2px"} gap={"15px"}>
-                                    <PhoneIcon boxSize={3} />
-                                    <Text>Celular: {formatPhoneNumber(contact.phone_number)}</Text>
-                                </Flex>
-                                <Flex align={"center"} pl={"10px"} py={"2px"} gap={"15px"}>
-                                    <TimeIcon boxSize={3} />
-                                    <Text>
-                                        Salvo em:{" "}
-                                        {new Date(contact.createdAt).toLocaleString().replace(",", "")}
-                                    </Text>
-                                </Flex>
-                            </ListItem>
-                        ))}
+                        {!contacts ? (
+                            <h1>Loading....</h1>
+                        ) : !contacts.length ? (
+                            <h1>Agenda vazia, adicione um contato.</h1>
+                        ) : (
+                            contacts.map((contact) => (
+                                <ListItem key={contact.id}>
+                                    <Flex
+                                        bgGradient={"linear(to-r, blue.200, pink.200, pink.400)"}
+                                        bgSize={"130%"}
+                                        bgPos={"center"}
+                                        borderRadius={"md"}
+                                        align={"center"}
+                                        pl={"10px"}
+                                        py={"2px"}
+                                        gap={"15px"}
+                                    >
+                                        <StarIcon boxSize={3} />
+                                        <Text>Nome: {`${contact.first_name} ${contact.last_name}`}</Text>
+                                        <Spacer />
+                                        <Flex pr={"4px"}>
+                                            <Button
+                                                px={"4px"}
+                                                py={"2px"}
+                                                h={"unset"}
+                                                minW={8}
+                                                bgColor={"transparent"}
+                                                onClick={() => {
+                                                    setModalFormat("updateContact");
+                                                    setModalContact(contact);
+                                                    onOpen();
+                                                }}
+                                            >
+                                                <EditIcon boxSize={4} />
+                                            </Button>
+                                            <Button
+                                                px={"4x"}
+                                                py={"2px"}
+                                                h={"unset"}
+                                                minW={8}
+                                                bgColor={"transparent"}
+                                                onClick={() => handdledeleteContact(contact.id)}
+                                            >
+                                                {idDeleteContact == contact.id ? (
+                                                    <InfoIcon color={"#E31515"} boxSize={3.5} />
+                                                ) : (
+                                                    <DeleteIcon boxSize={3.5} />
+                                                )}
+                                            </Button>
+                                        </Flex>
+                                    </Flex>
+                                    <Flex align={"center"} pl={"10px"} py={"2px"} gap={"15px"}>
+                                        <EmailIcon boxSize={3} />
+                                        <Text>Email: {contact.email}</Text>
+                                    </Flex>
+                                    <Flex align={"center"} pl={"10px"} py={"2px"} gap={"15px"}>
+                                        <PhoneIcon boxSize={3} />
+                                        <Text>Celular: {formatPhoneNumber(contact.phone_number)}</Text>
+                                    </Flex>
+                                    <Flex align={"center"} pl={"10px"} py={"2px"} gap={"15px"}>
+                                        <TimeIcon boxSize={3} />
+                                        <Text>
+                                            Salvo em:{" "}
+                                            {new Date(contact.createdAt).toLocaleString().replace(",", "")}
+                                        </Text>
+                                    </Flex>
+                                </ListItem>
+                            ))
+                        )}
                     </List>
                 </Center>
             </main>
@@ -109,9 +193,8 @@ export const getServerSideProps: GetServerSideProps<iDashboardProps> = async (ct
     }
 
     api.defaults.headers.authorization = `Bearer ${cookies["M6_S1_Token"]}`;
-    const { data: contacts } = await api.get<iContact[]>("/contacts");
     const { data: client } = await api.get<iClient>("/clients/profile");
-    return { props: { contacts, client } };
+    return { props: { client } };
 };
 
 const formatPhoneNumber = (phone_number: string) => {

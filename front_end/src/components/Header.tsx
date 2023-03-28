@@ -4,8 +4,13 @@ import { iStyledHeader } from "@/interfaces/pages.interfaces";
 import style from "@/styles/styles.module.css";
 import { useAuthContext } from "@/contexts/authContext";
 
-export const StyledHeader = ({ userName }: iStyledHeader) => {
+export const StyledHeader = ({ user, setModalFormat, onOpen }: iStyledHeader) => {
     const { logout } = useAuthContext();
+
+    const handdleEditClient = () => {
+        setModalFormat("updateClient");
+        onOpen();
+    };
 
     return (
         <header style={{ position: "relative" }}>
@@ -27,23 +32,28 @@ export const StyledHeader = ({ userName }: iStyledHeader) => {
                 >
                     Lista de Contatos
                 </Heading>
-                <Menu>
-                    <MenuButton pos={"absolute"} right={"20px"} top={"0"} h={"100%"}>
-                        {userName}
-                    </MenuButton>
-                    <MenuList
-                        bgColor={"blackAlpha.500"}
-                        border={"none"}
-                        boxShadow={"md"}
-                        mt={"-8px"}
-                        minW={"32"}
-                    >
-                        <MenuItem className={style.menuHover} onClick={logout} bgColor={"blackAlpha.400"}>
-                            <Text mr={"5px"}>Sair</Text>
-                            <ArrowForwardIcon />
-                        </MenuItem>
-                    </MenuList>
-                </Menu>
+                {user && (
+                    <Menu>
+                        <MenuButton pos={"absolute"} right={"20px"} top={"0"} h={"100%"}>
+                            {user.first_name}
+                        </MenuButton>
+                        <MenuList
+                            bgColor={"blackAlpha.500"}
+                            border={"none"}
+                            boxShadow={"md"}
+                            mt={"-8px"}
+                            minW={"32"}
+                        >
+                            <MenuItem onClick={handdleEditClient} bgColor={"blackAlpha.400"}>
+                                <Text mr={"5px"}>Editar</Text>
+                            </MenuItem>
+                            <MenuItem className={style.menuHover} onClick={logout} bgColor={"blackAlpha.400"}>
+                                <Text mr={"5px"}>Sair</Text>
+                                <ArrowForwardIcon />
+                            </MenuItem>
+                        </MenuList>
+                    </Menu>
+                )}
             </Flex>
         </header>
     );

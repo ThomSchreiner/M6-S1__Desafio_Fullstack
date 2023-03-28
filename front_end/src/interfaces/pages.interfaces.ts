@@ -1,5 +1,6 @@
-import { HTMLInputTypeAttribute } from "react";
+import { Dispatch, HTMLInputTypeAttribute, SetStateAction } from "react";
 import { UseFormRegisterReturn, FieldError } from "react-hook-form";
+import { BlockLike } from "typescript";
 import { iClient } from "./user.interfaces";
 
 export interface iDashboardProps {
@@ -7,7 +8,9 @@ export interface iDashboardProps {
 }
 
 export interface iStyledHeader {
-    userName: string;
+    user: iClient | null;
+    setModalFormat: Dispatch<SetStateAction<iModalFormat>>;
+    onOpen: () => void;
 }
 
 export interface iStyledInput {
@@ -16,6 +19,7 @@ export interface iStyledInput {
     placeholder: string;
     register: UseFormRegisterReturn<string>;
     errors: FieldError | undefined;
+    partial?: boolean;
     value?: string;
 }
 
@@ -24,7 +28,7 @@ export interface iStyledLink {
     text: string;
 }
 
-export type iModalFormat = "createContact" | "updateContact";
+export type iModalFormat = "createContact" | "updateContact" | "updateClient";
 
 export interface iModalContainer {
     isOpen: boolean;

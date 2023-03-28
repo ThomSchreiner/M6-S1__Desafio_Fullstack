@@ -1,4 +1,4 @@
-import { iContactRegister } from "@/interfaces/user.interfaces";
+import { iContactUpdate } from "@/interfaces/user.interfaces";
 import { contactUpdateSchema } from "@/schemas/contact.schemas";
 import { Button, ModalBody, ModalCloseButton, ModalContent, ModalHeader } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,12 +12,16 @@ export const ModalFormUpdateContact = ({ onClose }: iModalForm) => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<iContactRegister>({ resolver: yupResolver(contactUpdateSchema) });
+    } = useForm<iContactUpdate>({ resolver: yupResolver(contactUpdateSchema) });
 
     const { updateContact, modalContact } = useContactContext();
 
-    const onSubmit = async (data: iContactRegister) => {
-        await updateContact(data, onClose);
+    const onSubmit = async (data: iContactUpdate) => {
+        if (!Object.keys(data).length) {
+            onClose();
+        } else {
+            await updateContact(data, onClose);
+        }
     };
 
     return (
@@ -43,6 +47,7 @@ export const ModalFormUpdateContact = ({ onClose }: iModalForm) => {
                     placeholder={"Digite o nome"}
                     register={register("first_name")}
                     errors={errors.first_name}
+                    partial={true}
                     value={modalContact?.first_name}
                 />
                 <StyledInput
@@ -51,6 +56,7 @@ export const ModalFormUpdateContact = ({ onClose }: iModalForm) => {
                     placeholder={"Digite o sobrenome"}
                     register={register("last_name")}
                     errors={errors.last_name}
+                    partial={true}
                     value={modalContact?.last_name}
                 />
                 <StyledInput
@@ -59,6 +65,7 @@ export const ModalFormUpdateContact = ({ onClose }: iModalForm) => {
                     placeholder={"Digite o email"}
                     register={register("email")}
                     errors={errors.email}
+                    partial={true}
                     value={modalContact?.email}
                 />
                 <StyledInput
@@ -67,6 +74,7 @@ export const ModalFormUpdateContact = ({ onClose }: iModalForm) => {
                     placeholder={"Digite o número de celular"}
                     register={register("phone_number")}
                     errors={errors.phone_number}
+                    partial={true}
                     value={modalContact?.phone_number}
                 />
 

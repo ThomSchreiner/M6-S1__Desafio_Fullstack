@@ -1,5 +1,5 @@
 import { iContactContext, iContextProps } from "@/interfaces/contexts.interfaces";
-import { iContact, iContactRegister } from "@/interfaces/user.interfaces";
+import { iContact, iContactRegister, iContactUpdate } from "@/interfaces/user.interfaces";
 import { api } from "@/services/api";
 import { createContext, useContext, useState } from "react";
 import { toast } from "react-toastify";
@@ -42,7 +42,7 @@ export const ContactProvider = ({ children }: iContextProps) => {
         }
     };
 
-    const updateContact = async (body: iContactRegister, onClose: () => void) => {
+    const updateContact = async (body: iContactUpdate, onClose: () => void) => {
         try {
             const cookies = parseCookies();
 

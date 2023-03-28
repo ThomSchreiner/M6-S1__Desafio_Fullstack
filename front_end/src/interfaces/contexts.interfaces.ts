@@ -18,5 +18,11 @@ export interface iClientContext {
 }
 
 export interface iContactContext {
-    contactRegister: (body: iContactRegister, onClose: () => void) => Promise<void>;
+    contacts: iContact[] | null;
+    modalContact: iContact | null;
+    setModalContact: Dispatch<SetStateAction<iContact | null>>;
+    getContacts: () => Promise<void>;
+    createContact: (body: iContactRegister, onClose: () => void) => Promise<void>;
+    updateContact: (body: iContactRegister, onClose: () => void) => Promise<void>;
+    deleteContact: (id: string) => Promise<void>;
 }

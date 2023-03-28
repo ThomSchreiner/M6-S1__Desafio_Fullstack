@@ -1,22 +1,14 @@
 import { FormControl, FormErrorMessage, FormLabel, Input } from "@chakra-ui/react";
-import { HTMLInputTypeAttribute } from "react";
-import { UseFormRegisterReturn, FieldError } from "react-hook-form";
+import { iStyledInput } from "@/interfaces/pages.interfaces";
 
-interface iStyledInput {
-    label: string;
-    inputType: HTMLInputTypeAttribute;
-    placeholder: string;
-    register: UseFormRegisterReturn<string>;
-    errors: FieldError | undefined;
-}
-
-export const StyledInput = ({ label, inputType, placeholder, register, errors }: iStyledInput) => {
+export const StyledInput = ({ label, inputType, placeholder, register, errors, value }: iStyledInput) => {
     return (
         <FormControl isRequired isInvalid={!!errors}>
             <FormLabel fontSize={"sm"}>{label}</FormLabel>
             <Input
                 type={inputType}
                 placeholder={placeholder}
+                defaultValue={value || ""}
                 fontSize={"sm"}
                 bgColor={"blackAlpha.200"}
                 color={"gray.800"}

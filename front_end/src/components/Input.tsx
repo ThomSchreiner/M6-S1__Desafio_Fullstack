@@ -1,9 +1,17 @@
 import { FormControl, FormErrorMessage, FormLabel, Input } from "@chakra-ui/react";
 import { iStyledInput } from "@/interfaces/pages.interfaces";
 
-export const StyledInput = ({ label, inputType, placeholder, register, errors, value }: iStyledInput) => {
+export const StyledInput = ({
+    label,
+    inputType,
+    placeholder,
+    register,
+    errors,
+    partial = false,
+    value,
+}: iStyledInput) => {
     return (
-        <FormControl isRequired isInvalid={!!errors}>
+        <FormControl isRequired={!partial} isInvalid={!!errors}>
             <FormLabel fontSize={"sm"}>{label}</FormLabel>
             <Input
                 type={inputType}

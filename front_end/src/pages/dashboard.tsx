@@ -32,18 +32,18 @@ import { ModalContainer } from "@/components/Modal/modalContainer";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useContactContext } from "@/contexts/contactContext";
+import { useClientContext } from "@/contexts/clientContext";
 
-export default function Dashboard({ client }: iDashboardProps) {
+export default function Dashboard({}) {
     const [modalFormat, setModalFormat] = useState<iModalFormat>("createContact");
     const [idDeleteContact, setIdDeleteContact] = useState("");
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { client, getClient } = useClientContext();
     const { contacts, getContacts, setModalContact, deleteContact } = useContactContext();
 
     useEffect(() => {
-        const getAllContacts = async () => {
-            await getContacts();
-        };
-        getAllContacts();
+        getClient();
+        getContacts();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -70,7 +70,7 @@ export default function Dashboard({ client }: iDashboardProps) {
             </Head>
             <ModalContainer isOpen={isOpen} onClose={onClose} modalFormat={modalFormat} />
             <StyledBgImage />
-            <StyledHeader userName={client.first_name} />
+            <StyledHeader user={client} onOpen={onOpen} setModalFormat={setModalFormat} />
 
             <main>
                 <Center mt={"40px"} flexDirection={"column"} gap={"24px"}>
@@ -185,16 +185,14 @@ export default function Dashboard({ client }: iDashboardProps) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps<iDashboardProps> = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const cookies = nookies.get(ctx);
 
     if (!cookies["M6_S1_Token"]) {
         return { redirect: { destination: "/login", permanent: false } };
     }
 
-    api.defaults.headers.authorization = `Bearer ${cookies["M6_S1_Token"]}`;
-    const { data: client } = await api.get<iClient>("/clients/profile");
-    return { props: { client } };
+    return { props: {} };
 };
 
 const formatPhoneNumber = (phone_number: string) => {

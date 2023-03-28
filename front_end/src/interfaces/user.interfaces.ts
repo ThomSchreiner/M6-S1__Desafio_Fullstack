@@ -28,6 +28,9 @@ export interface iContact {
     updatedAt: Date;
 }
 
+export type iClientUpdate = Partial<iClientRegister>;
+export type iContactUpdate = Partial<iContactRegister>;
+
 export interface iLogin {
     email: string;
     password: string;

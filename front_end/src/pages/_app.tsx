@@ -1,4 +1,6 @@
 import { AuthProvider } from "@/contexts/authContext";
+import { ClientProvider } from "@/contexts/clientContext";
+import { ContactProvider } from "@/contexts/contactContext";
 import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
@@ -8,8 +10,12 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
         <ChakraProvider>
             <AuthProvider>
-                <ToastContainer autoClose={1500} />
-                <Component {...pageProps} />
+                <ClientProvider>
+                    <ContactProvider>
+                        <ToastContainer autoClose={1500} />
+                        <Component {...pageProps} />
+                    </ContactProvider>
+                </ClientProvider>
             </AuthProvider>
         </ChakraProvider>
     );

@@ -1,5 +1,9 @@
 # M6-S1 Desafio Fullstack
 
+### Clique [aqui](https://contact-list-one-kappa.vercel.app) e conheça a aplicação antes de fazer o clone.
+
+#
+
 ## Primeiros passos
 
 Para clonar e executar este repositório, você precisará do [Git](https://git-scm.com), do [Node.js](https://nodejs.org/pt-br/download/), do [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/) e do [PostgreSQL](https://www.postgresql.org/download/) instalados em seu computador. \

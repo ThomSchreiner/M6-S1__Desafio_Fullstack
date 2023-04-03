@@ -3,6 +3,9 @@
     "version": "1.0.0",
     "main": "src/app.ts",
     "license": "MIT",
+    "engines": {
+        "node": "18"
+    },
     "scripts": {
         "dev": "ts-node-dev --ignore-watch node_modules src/server.ts",
         "build": "tsc",

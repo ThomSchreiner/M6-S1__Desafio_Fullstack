@@ -21,10 +21,7 @@ export const AuthProvider = ({ children }: iContextProps) => {
             router.push("/dashboard");
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                const message: string = error.response?.data.message;
-                if (message.includes("incorrect")) {
-                    toast.error("Email ou senha incorretos");
-                }
+                toast.error(error.response?.data.message);
             }
         }
     };

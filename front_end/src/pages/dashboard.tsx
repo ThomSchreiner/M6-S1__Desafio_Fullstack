@@ -75,6 +75,7 @@ export default function Dashboard({}) {
             <main>
                 <Center mt={"40px"} flexDirection={"column"} gap={"24px"}>
                     <Flex
+                        as={"div"}
                         bg={"whiteAlpha.900"}
                         borderRadius="xl"
                         px={"32px"}

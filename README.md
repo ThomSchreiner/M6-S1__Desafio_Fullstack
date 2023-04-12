@@ -1,4 +1,4 @@
-# M6-S1 Desafio Fullstack
+# Contact List
 
 ### Clique [aqui](https://contact-list-one-kappa.vercel.app) e conheça a aplicação antes de fazer o clone.
 

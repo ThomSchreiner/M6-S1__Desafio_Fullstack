@@ -8,7 +8,9 @@ import cors from "cors";
 
 export const app = express();
 
-app.use(cors({ origin: ["http://localhost:3000", "https://contact-list-one-kappa.vercel.app"] }));
+app.use(
+  cors({ origin: ["http://localhost:3000", "https://contact-list.cyclic.app"] })
+);
 app.use(express.json());
 
 app.use("/login", loginRoutes);
